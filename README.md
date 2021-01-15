@@ -3,6 +3,8 @@
 Helpers you can use in tests that relate to the passage of time (i.e. code that
 involves `setTimeout`, `setInterval`, `new Date()`, `Date.now()`, etc.).
 
+[Documentation](https://www.graphile.org/jest-time-helpers/).
+
 This helper library was born out of
 [adding cron functionality](https://github.com/graphile/worker/pull/163) to
 [Graphile Worker](https://github.com/graphile/worker) and needing a reliable way
@@ -10,7 +12,10 @@ to test it.
 
 ## Methods
 
-### `setupFakeTimers()`
+For [full documentation](https://www.graphile.org/jest-time-helpers/), please
+click the headers. The following acts as a quick-reference.
+
+### [`setupFakeTimers()`](https://www.graphile.org/jest-time-helpers/modules.html#setupfaketimers)
 
 Import and call the `setupFakeTimers` helper at the top of your test file:
 
@@ -38,14 +43,14 @@ test("new Date().toISOString() returns the expected timestamp", () => {
 });
 ```
 
-### `sleep(ms: number)`
+### [`sleep(ms: number)`](https://www.graphile.org/jest-time-helpers/modules.html#sleep)
 
 A trivial method that returns a promise that resolves after the given number of
 real-time milliseconds. The important part about this method (as opposed to one
 that you might write yourself) is that it is not inhibited or influenced by fake
 timers.
 
-### `sleepUntil(condition: () => void, maxDuration = 2000, pollInterval = 2)`
+### [`sleepUntil(condition: () => void, maxDuration = 2000, pollInterval = 2)`](https://www.graphile.org/jest-time-helpers/modules.html#sleepuntil)
 
 Polls the `condition` callback every `pollInterval` milliseconds, and resolves
 success when `condition()` returns a truthy value. If `maxDuration` elapses
