@@ -10,7 +10,7 @@ const setTimeoutBypassingFakes = global.setTimeout;
  *
  * @param ts - how long to sleep for.
  */
-export const sleep = (ms: number) =>
+export const sleep = (ms: number): Promise<void> =>
   new Promise((resolve) => setTimeoutBypassingFakes(resolve, ms));
 
 /**
