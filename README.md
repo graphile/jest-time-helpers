@@ -1,7 +1,11 @@
 # jest-time-helpers
 
 Helpers you can use in tests that relate to the passage of time (i.e. code that
-involves `setTimeout`, `setInterval`, `new Date()`, `Date.now()`, etc.).
+involves `setTimeout`, `setInterval`, `new Date()`, `Date.now()`, etc.). Allows
+you to "set the clock" to a particular point in time, advancing any `setTimeout`
+or `setInterval` calls that need advancing at the same time. Makes it possible
+(even pleasant!) to test code that would normally be dependent on the passage of
+time, such as scheduled events.
 
 [Documentation](https://www.graphile.org/jest-time-helpers/).
 
@@ -9,6 +13,8 @@ This helper library was born out of
 [adding cron functionality](https://github.com/graphile/worker/pull/163) to
 [Graphile Worker](https://github.com/graphile/worker) and needing a reliable way
 to test it.
+
+If you find this useful, please give it a star ⭐
 
 ## Methods
 

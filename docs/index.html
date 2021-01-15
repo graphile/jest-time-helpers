@@ -62,12 +62,17 @@
 					<h1>jest-time-helpers</h1>
 				</a>
 				<p>Helpers you can use in tests that relate to the passage of time (i.e. code that
-				involves <code>setTimeout</code>, <code>setInterval</code>, <code>new Date()</code>, <code>Date.now()</code>, etc.).</p>
+					involves <code>setTimeout</code>, <code>setInterval</code>, <code>new Date()</code>, <code>Date.now()</code>, etc.). Allows
+					you to &quot;set the clock&quot; to a particular point in time, advancing any <code>setTimeout</code>
+					or <code>setInterval</code> calls that need advancing at the same time. Makes it possible
+					(even pleasant!) to test code that would normally be dependent on the passage of
+				time, such as scheduled events.</p>
 				<p><a href="https://www.graphile.org/jest-time-helpers/">Documentation</a>.</p>
 				<p>This helper library was born out of
 					<a href="https://github.com/graphile/worker/pull/163">adding cron functionality</a> to
 					<a href="https://github.com/graphile/worker">Graphile Worker</a> and needing a reliable way
 				to test it.</p>
+				<p>If you find this useful, please give it a star ⭐</p>
 				<a href="#methods" id="methods" style="color: inherit; text-decoration: none;">
 					<h2>Methods</h2>
 				</a>
