@@ -1,10 +1,16 @@
 {
   "name": "jest-time-helpers",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Helpers you can use in tests that relate to the passage of time (i.e. code that involves setTimeout, setInterval, new Date(), Date.now(), etc)",
   "main": "dist/index.js",
   "scripts": {
-    "test": "jest"
+    "prepack": "rm -Rf dist && tsc",
+    "watch": "tsc --watch",
+    "lint": "yarn prettier:check && eslint --ext .js,.jsx,.ts,.tsx,.graphql .",
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx,.graphql . --fix; prettier --ignore-path .eslintignore --write '**/*.{js,jsx,ts,tsx,graphql,md,json}'",
+    "prettier:check": "prettier --ignore-path .eslintignore --check '**/*.{js,jsx,ts,tsx,graphql,md,json}'",
+    "test": "jest && depcheck",
+    "preversion": "grep '^### Pending' RELEASE_NOTES.md && echo \"⚠️ Cannot publish with 'Pending' in RELEASE_NOTES ⚠️\" && exit 1 || true"
   },
   "repository": {
     "type": "git",
@@ -30,5 +36,23 @@
   "bugs": {
     "url": "https://github.com/graphile/jest-time-helpers/issues"
   },
-  "homepage": "https://github.com/graphile/jest-time-helpers#readme"
+  "homepage": "https://github.com/graphile/jest-time-helpers#readme",
+  "peerDependencies": {
+    "jest": ">=22 <27"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.21",
+    "@typescript-eslint/eslint-plugin": "^4.13.0",
+    "@typescript-eslint/parser": "^4.13.0",
+    "depcheck": "^1.3.1",
+    "eslint": "^7.17.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.1.3",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "ts-jest": "^26.4.4",
+    "typescript": "^4.1.3"
+  }
 }
