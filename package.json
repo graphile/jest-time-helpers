@@ -1,0 +1,34 @@
+{
+  "name": "jest-time-helpers",
+  "version": "1.0.0",
+  "description": "Helpers you can use in tests that relate to the passage of time (i.e. code that involves setTimeout, setInterval, new Date(), Date.now(), etc)",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/graphile/jest-time-helpers.git"
+  },
+  "keywords": [
+    "jest",
+    "time",
+    "timing",
+    "timeout",
+    "interval",
+    "now",
+    "date",
+    "helpers",
+    "test",
+    "testing",
+    "passage",
+    "settimeout",
+    "setinterval"
+  ],
+  "author": "Benjie Gillam <code@benjiegillam.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/graphile/jest-time-helpers/issues"
+  },
+  "homepage": "https://github.com/graphile/jest-time-helpers#readme"
+}
