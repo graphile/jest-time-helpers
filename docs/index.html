@@ -63,6 +63,7 @@
 				</a>
 				<p>Helpers you can use in tests that relate to the passage of time (i.e. code that
 				involves <code>setTimeout</code>, <code>setInterval</code>, <code>new Date()</code>, <code>Date.now()</code>, etc.).</p>
+				<p><a href="https://www.graphile.org/jest-time-helpers/">Documentation</a>.</p>
 				<p>This helper library was born out of
 					<a href="https://github.com/graphile/worker/pull/163">adding cron functionality</a> to
 					<a href="https://github.com/graphile/worker">Graphile Worker</a> and needing a reliable way
@@ -70,8 +71,10 @@
 				<a href="#methods" id="methods" style="color: inherit; text-decoration: none;">
 					<h2>Methods</h2>
 				</a>
+				<p>For <a href="https://www.graphile.org/jest-time-helpers/">full documentation</a>, please
+				click the headers. The following acts as a quick-reference.</p>
 				<a href="#setupfaketimers" id="setupfaketimers" style="color: inherit; text-decoration: none;">
-					<h3><code>setupFakeTimers()</code></h3>
+					<h3><a href="https://www.graphile.org/jest-time-helpers/modules.html#setupfaketimers"><code>setupFakeTimers()</code></a></h3>
 				</a>
 				<p>Import and call the <code>setupFakeTimers</code> helper at the top of your test file:</p>
 				<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">setupFakeTimers</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;jest-time-helpers&quot;</span><span style="color: #000000">;</span>
@@ -93,14 +96,14 @@
 <span style="color: #000000">});</span>
 </code></pre>
 				<a href="#sleepms-number" id="sleepms-number" style="color: inherit; text-decoration: none;">
-					<h3><code>sleep(ms: number)</code></h3>
+					<h3><a href="https://www.graphile.org/jest-time-helpers/modules.html#sleep"><code>sleep(ms: number)</code></a></h3>
 				</a>
 				<p>A trivial method that returns a promise that resolves after the given number of
 					real-time milliseconds. The important part about this method (as opposed to one
 					that you might write yourself) is that it is not inhibited or influenced by fake
 				timers.</p>
 				<a href="#sleepuntilcondition--gt-void-maxduration--2000-pollinterval--2" id="sleepuntilcondition--gt-void-maxduration--2000-pollinterval--2" style="color: inherit; text-decoration: none;">
-					<h3><code>sleepUntil(condition: () =&gt; void, maxDuration = 2000, pollInterval = 2)</code></h3>
+					<h3><a href="https://www.graphile.org/jest-time-helpers/modules.html#sleepuntil"><code>sleepUntil(condition: () =&gt; void, maxDuration = 2000, pollInterval = 2)</code></a></h3>
 				</a>
 				<p>Polls the <code>condition</code> callback every <code>pollInterval</code> milliseconds, and resolves
 					success when <code>condition()</code> returns a truthy value. If <code>maxDuration</code> elapses
