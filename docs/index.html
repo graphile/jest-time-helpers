@@ -1,0 +1,191 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>jest-time-helpers</title>
+	<meta name="description" content="Documentation for jest-time-helpers">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script async src="assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">jest-time-helpers</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<h1>Project jest-time-helpers</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#jest-time-helpers" id="jest-time-helpers" style="color: inherit; text-decoration: none;">
+					<h1>jest-time-helpers</h1>
+				</a>
+				<p>Helpers you can use in tests that relate to the passage of time (i.e. code that
+				involves <code>setTimeout</code>, <code>setInterval</code>, <code>new Date()</code>, <code>Date.now()</code>, etc.).</p>
+				<p>This helper library was born out of
+					<a href="https://github.com/graphile/worker/pull/163">adding cron functionality</a> to
+					<a href="https://github.com/graphile/worker">Graphile Worker</a> and needing a reliable way
+				to test it.</p>
+				<a href="#methods" id="methods" style="color: inherit; text-decoration: none;">
+					<h2>Methods</h2>
+				</a>
+				<a href="#setupfaketimers" id="setupfaketimers" style="color: inherit; text-decoration: none;">
+					<h3><code>setupFakeTimers()</code></h3>
+				</a>
+				<p>Import and call the <code>setupFakeTimers</code> helper at the top of your test file:</p>
+				<pre><code class="language-js"><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">setupFakeTimers</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;jest-time-helpers&quot;</span><span style="color: #000000">;</span>
+<span style="color: #0000FF">const</span><span style="color: #000000"> { </span><span style="color: #0070C1">setTime</span><span style="color: #000000"> } = </span><span style="color: #795E26">setupFakeTimers</span><span style="color: #000000">();</span>
+</code></pre>
+				<p>Then inside your tests you can call <code>setTime(timestamp)</code> to pretend that the
+					system time is the timestamp you gave. When you set the timestamp to a value
+					after the previous timestamp, all timers (<code>setTimeout</code>, <code>setInterval</code>, etc) will
+					be advanced by that amount, as well as the &quot;clock&quot;. When you set the timestamp
+					to a value before the previous timestamp, only the clock will be updated and no
+				timeouts/intervals will be effected.</p>
+				<p>Example:</p>
+				<pre><code class="language-js"><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">REFERENCE_TIMESTAMP</span><span style="color: #000000"> = </span><span style="color: #098658">950536800000</span><span style="color: #000000">; </span><span style="color: #008000">/* 14th February 2000, 2pm UTC */</span>
+
+<span style="color: #795E26">test</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;new Date().toISOString() returns the expected timestamp&quot;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">  </span><span style="color: #795E26">setTime</span><span style="color: #000000">(</span><span style="color: #0070C1">REFERENCE_TIMESTAMP</span><span style="color: #000000">);</span>
+<span style="color: #000000">  </span><span style="color: #008000">// Note, time may have advanced a millisecond or two, so we can&#039;t be too precise</span>
+<span style="color: #000000">  </span><span style="color: #795E26">expect</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #267F99">Date</span><span style="color: #000000">().</span><span style="color: #795E26">toISOString</span><span style="color: #000000">()).</span><span style="color: #795E26">toMatch</span><span style="color: #000000">(</span><span style="color: #811F3F">/</span><span style="color: #EE0000">^</span><span style="color: #811F3F">2000-02-14T14:00:0.</span><span style="color: #000000">*</span><span style="color: #811F3F">Z</span><span style="color: #EE0000">$</span><span style="color: #811F3F">/</span><span style="color: #000000">);</span>
+<span style="color: #000000">});</span>
+</code></pre>
+				<a href="#sleepms-number" id="sleepms-number" style="color: inherit; text-decoration: none;">
+					<h3><code>sleep(ms: number)</code></h3>
+				</a>
+				<p>A trivial method that returns a promise that resolves after the given number of
+					real-time milliseconds. The important part about this method (as opposed to one
+					that you might write yourself) is that it is not inhibited or influenced by fake
+				timers.</p>
+				<a href="#sleepuntilcondition--gt-void-maxduration--2000-pollinterval--2" id="sleepuntilcondition--gt-void-maxduration--2000-pollinterval--2" style="color: inherit; text-decoration: none;">
+					<h3><code>sleepUntil(condition: () =&gt; void, maxDuration = 2000, pollInterval = 2)</code></h3>
+				</a>
+				<p>Polls the <code>condition</code> callback every <code>pollInterval</code> milliseconds, and resolves
+					success when <code>condition()</code> returns a truthy value. If <code>maxDuration</code> elapses
+				before <code>condition()</code> returns true, returns a rejected promise.</p>
+				<p>Useful for waiting on external actions without putting arbitrary sleeps in your
+				code (e.g. waiting for a database record to be created).</p>
+				<p>Like <code>sleep()</code>, it is not inhibited or influenced by fake timers.</p>
+				<a href="#constants" id="constants" style="color: inherit; text-decoration: none;">
+					<h2>Constants</h2>
+				</a>
+				<ul>
+					<li><code>SECOND</code> - number of milliseconds in a second</li>
+					<li><code>MINUTE</code> - number of milliseconds in a minute</li>
+					<li><code>HOUR</code> - number of milliseconds in a hour</li>
+					<li><code>DAY</code> - number of milliseconds in a day</li>
+					<li><code>WEEK</code> - number of milliseconds in a week</li>
+				</ul>
+				<a href="#crowd-funded-open-source-software" id="crowd-funded-open-source-software" style="color: inherit; text-decoration: none;">
+					<h2>Crowd-funded open-source software</h2>
+				</a>
+				<p>To help us develop software sustainably under the MIT license, we ask all
+					individuals and businesses that use our software to help support its ongoing
+				maintenance and development via sponsorship.</p>
+				<a href="#click-here-to-find-out-more-about-sponsors-and-sponsorship" id="click-here-to-find-out-more-about-sponsors-and-sponsorship" style="color: inherit; text-decoration: none;">
+					<h3><a href="https://www.graphile.org/sponsor/">Click here to find out more about sponsors and sponsorship.</a></h3>
+				</a>
+				<a href="#development" id="development" style="color: inherit; text-decoration: none;">
+					<h2>Development</h2>
+				</a>
+				<p>Checkout the repository, then run the following commands:</p>
+				<pre><code><span style="color: #001080">yarn</span>
+<span style="color: #001080">yarn</span><span style="color: #000000"> </span><span style="color: #001080">test</span>
+</code></pre>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="modules.html">Exports</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#day" class="tsd-kind-icon">DAY</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#hour" class="tsd-kind-icon">HOUR</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#minute" class="tsd-kind-icon">MINUTE</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#second" class="tsd-kind-icon">SECOND</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="modules.html#week" class="tsd-kind-icon">WEEK</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#setupfaketimers" class="tsd-kind-icon">setup<wbr>Fake<wbr>Timers</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#sleep" class="tsd-kind-icon">sleep</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="modules.html#sleepuntil" class="tsd-kind-icon">sleep<wbr>Until</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
