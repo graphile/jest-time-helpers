@@ -1,6 +1,6 @@
 {
   "name": "jest-time-helpers",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Helpers you can use in tests that relate to the passage of time (i.e. code that involves setTimeout, setInterval, new Date(), Date.now(), etc)",
   "main": "dist/index.js",
   "scripts": {
@@ -57,5 +57,7 @@
     "typedoc": "^0.20.14",
     "typescript": "^4.1.3"
   },
-  "files": ["dist"]
+  "files": [
+    "dist"
+  ]
 }
