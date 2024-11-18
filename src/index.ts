@@ -10,8 +10,19 @@ const setTimeoutBypassingFakes = global.setTimeout;
  *
  * @param ts - how long to sleep for.
  */
-export const sleep = (ms: number): Promise<void> =>
-  new Promise((resolve) => setTimeoutBypassingFakes(resolve, ms));
+export const sleep = (
+  ms: number,
+  unref = false,
+): Promise<void> & { timeout: NodeJS.Timeout } => {
+  let timeout!: NodeJS.Timeout;
+  const promise = new Promise<void>((resolve) => {
+    timeout = setTimeoutBypassingFakes(resolve, ms);
+  });
+  if (unref) {
+    timeout.unref();
+  }
+  return Object.assign(promise, { timeout });
+};
 
 /**
  * Polls until the condition passes.
