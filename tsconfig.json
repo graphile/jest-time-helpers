@@ -1,13 +1,12 @@
 {
+  "extends": "@tsconfig/node20",
   "compilerOptions": {
     "rootDir": "src",
     "declarationDir": "./dist",
     "outDir": "./dist",
+    "isolatedModules": true,
     "declaration": true,
     "allowJs": false,
-    "target": "es2018",
-    "module": "commonjs",
-    "moduleResolution": "node",
     "sourceMap": true,
     "pretty": true,
     "experimentalDecorators": true,
@@ -16,8 +15,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "preserveWatchOutput": true,
-    "lib": ["es2018", "esnext.asynciterable"]
+    "preserveWatchOutput": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
