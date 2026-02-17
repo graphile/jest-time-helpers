@@ -76,6 +76,15 @@ async function aFewRunLoops(count = 5) {
   }
 }
 
+const OriginalDate = global.Date;
+
+/**
+ * Returns the real-world current timestamp (unaffected by fake timers).
+ */
+function realNow() {
+  return OriginalDate.now();
+}
+
 /**
  * Sets up fake timers and Date implementation within your Jest test file. You
  * should call this at the top of the file (**not** within a test or an
@@ -91,16 +100,8 @@ async function aFewRunLoops(count = 5) {
  * offset.
  */
 export function setupFakeTimers() {
-  let OriginalDate = global.Date;
-
-  beforeEach(() => {
-    OriginalDate = global.Date;
-    jest.useFakeTimers();
-  });
-
-  afterEach(() => {
-    jest.useRealTimers();
-  });
+  beforeEach(() => void jest.useFakeTimers());
+  afterEach(() => void jest.useRealTimers());
 
   /**
    * Sets the fake time such that a call to `Date.now()` (or `new Date()`)
@@ -126,10 +127,10 @@ export function setupFakeTimers() {
         targetTimestamp,
       )}'`,
     );
-    const clock = (Date as any).clock as Clock;
-    if (!clock || typeof clock.now !== "number") {
-      throw new Error(`Expected sinonjs clock!`);
-    }
+
+    const clock = (Date as any).clock;
+    assertSinonJsClock(clock);
+
     if (targetTimestamp < clock.now) {
       clock.setSystemTime(targetTimestamp);
     } else {
@@ -144,16 +145,19 @@ export function setupFakeTimers() {
     }
   }
 
-  /**
-   * Returns the real-world current timestamp (unaffected by fake timers).
-   */
-  function realNow() {
-    return OriginalDate.now();
-  }
-
   // In future we may add other methods such as `setTimeWithoutAdvancingTimers`
   // to emulate the system clock changing without real time elapsing.
   return { setTime, realNow };
+}
+
+function assertSinonJsClock(clock: any): asserts clock is Clock {
+  if (
+    !clock ||
+    typeof clock.now !== "number" ||
+    typeof clock.setSystemTime !== "function"
+  ) {
+    throw new Error(`Expected sinonjs clock!`);
+  }
 }
 
 /** One second in milliseconds */
