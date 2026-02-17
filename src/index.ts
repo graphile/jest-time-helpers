@@ -4,6 +4,8 @@ import * as util from "util";
 // Grab the setTimeout from global before jest overwrites it with useFakeTimers
 const setTimeoutBypassingFakes = global.setTimeout;
 
+type Timeout = ReturnType<typeof setTimeout>;
+
 /**
  * Wait a number of milliseconds of _real time_ (not mocked time); useful for
  * allowing the runloop or external systems to advance.
@@ -13,8 +15,8 @@ const setTimeoutBypassingFakes = global.setTimeout;
 export const sleep = (
   ms: number,
   unref = false,
-): Promise<void> & { timeout: NodeJS.Timeout } => {
-  let timeout!: NodeJS.Timeout;
+): Promise<void> & { timeout: Timeout } => {
+  let timeout!: Timeout;
   const promise = new Promise<void>((resolve) => {
     timeout = setTimeoutBypassingFakes(resolve, ms);
   });
