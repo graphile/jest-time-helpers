@@ -1,5 +1,4 @@
 import { setupFakeTimers } from "../src";
-import { jest, test, expect } from "@jest/globals";
 
 const { setTime, realNow } = setupFakeTimers();
 const REFERENCE_TIMESTAMP = 950536800000; /* 14th February 2000, 2pm UTC */
