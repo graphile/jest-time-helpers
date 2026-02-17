@@ -109,7 +109,9 @@ export function setupFakeTimers() {
   });
   afterEach(() => {
     void jest.useRealTimers();
-    if (interval != null) clearInterval(interval);
+    if (interval != null) {
+      clearInterval(interval);
+    }
   });
 
   /**
