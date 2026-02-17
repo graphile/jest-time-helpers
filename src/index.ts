@@ -49,8 +49,8 @@ export async function sleepUntil(
   }
 
   // Wait for condition to pass
-  const start = Date.now();
-  while (Date.now() - start < maxDuration) {
+  const start = realNow();
+  while (realNow() - start < maxDuration) {
     await sleep(pollInterval);
     if (condition()) {
       // Success
@@ -100,8 +100,19 @@ function realNow() {
  * offset.
  */
 export function setupFakeTimers() {
-  beforeEach(() => void jest.useFakeTimers());
-  afterEach(() => void jest.useRealTimers());
+  let interval: ReturnType<typeof setInterval> | null = null;
+  beforeEach(() => {
+    interval = setInterval(() => {
+      jest.advanceTimersByTime(0);
+    }, 10);
+    jest.useFakeTimers();
+  });
+  afterEach(() => {
+    void jest.useRealTimers();
+    if (interval != null) {
+      clearInterval(interval);
+    }
+  });
 
   /**
    * Sets the fake time such that a call to `Date.now()` (or `new Date()`)
