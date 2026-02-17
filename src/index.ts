@@ -4,6 +4,8 @@ import * as util from "util";
 // Grab the setTimeout from global before jest overwrites it with useFakeTimers
 const setTimeoutBypassingFakes = global.setTimeout;
 
+type Timeout = ReturnType<typeof setTimeout>;
+
 /**
  * Wait a number of milliseconds of _real time_ (not mocked time); useful for
  * allowing the runloop or external systems to advance.
@@ -13,8 +15,8 @@ const setTimeoutBypassingFakes = global.setTimeout;
 export const sleep = (
   ms: number,
   unref = false,
-): Promise<void> & { timeout: NodeJS.Timeout } => {
-  let timeout!: NodeJS.Timeout;
+): Promise<void> & { timeout: Timeout } => {
+  let timeout!: Timeout;
   const promise = new Promise<void>((resolve) => {
     timeout = setTimeoutBypassingFakes(resolve, ms);
   });
@@ -74,6 +76,15 @@ async function aFewRunLoops(count = 5) {
   }
 }
 
+const OriginalDate = global.Date;
+
+/**
+ * Returns the real-world current timestamp (unaffected by fake timers).
+ */
+function realNow() {
+  return OriginalDate.now();
+}
+
 /**
  * Sets up fake timers and Date implementation within your Jest test file. You
  * should call this at the top of the file (**not** within a test or an
@@ -89,104 +100,46 @@ async function aFewRunLoops(count = 5) {
  * offset.
  */
 export function setupFakeTimers() {
-  jest.useFakeTimers();
-
-  const OriginalDate = global.Date;
-
-  /** The offset, in milliseconds, to apply to results from `Date.now()` */
-  let offset = 0;
-
-  function fakeNow() {
-    return OriginalDate.now() + offset;
-  }
+  beforeEach(() => void jest.useFakeTimers());
+  afterEach(() => void jest.useRealTimers());
 
   /**
-   * A copy of `Date`, but overrides `new Date()` and `Date.now()` to return a
-   * date/timestamp factoring in `setTime()` calls.
-   */
-  const FakeDate: typeof Date = function (...args: any[]) {
-    if (args.length === 0) {
-      // `new Date()` becomes `new Date(fakeNow())`
-      return new OriginalDate(fakeNow());
-    } else if (args.length === 1) {
-      // As before
-      return new OriginalDate(args[0]);
-    } else {
-      // As before
-      return new OriginalDate(
-        args[0],
-        args[1],
-        args[2],
-        args[3],
-        args[4],
-        args[5],
-        args[6],
-      );
-    }
-  } as any;
-
-  // Copy static methods of Date, overriding Date.now()
-  FakeDate.now = () => fakeNow();
-  FakeDate.parse = Date.parse;
-  FakeDate.UTC = Date.UTC;
-
-  /**
-   * Sets the `offset` such that a call to `Date.now()` (or `new Date()`) would
-   * return this timestamp if called immediately (but time continues to
+   * Sets the fake time such that a call to `Date.now()` (or `new Date()`)
+   * would return this timestamp if called immediately (but time continues to
    * progress as expected after this). Also advances the timers by the
-   * difference from the previous `offset`, if positive. Setting time backwards
-   * is allowed (like setting back the system clock on a computer), but will
-   * not advance (or undo the advancement of) any timers.
+   * difference from the previous time, if positive. Setting time backwards is
+   * allowed (like setting back the system clock on a computer), but will not
+   * advance (or undo the advancement of) any timers.
    *
    * Since advancing the time a few hours might not run all the intermediary
    * code quite right, we actually step it up by a configurable increment
    * (defaults to one minute) at a time. Setting time backwards (no matter how
    * far back) is done all at once.
    *
-   * @param timestamp - the target timestamp
+   * @param targetTimestamp - the target timestamp
    * @param increment - the maximum we should advance time by at once in order to step towards `timestamp`
    */
-  async function setTime(timestamp: number, increment = MINUTE) {
+  async function setTime(targetTimestamp: number, increment = MINUTE) {
     assert.strictEqual(
-      typeof timestamp,
+      typeof targetTimestamp,
       "number",
       `Expected \`setTime\` to be passed a number of milliseconds, instead received '${util.inspect(
-        timestamp,
+        targetTimestamp,
       )}'`,
     );
-    const finalOffset = timestamp - OriginalDate.now();
-    const advancement = finalOffset - offset;
-    if (advancement < 0) {
-      offset = finalOffset;
+
+    if (targetTimestamp < Date.now()) {
+      jest.setSystemTime(targetTimestamp);
     } else {
-      let previousOffset = offset;
-      while (previousOffset + increment < finalOffset) {
-        offset = previousOffset + increment;
-        previousOffset = offset;
+      while (Date.now() + increment < targetTimestamp) {
         jest.advanceTimersByTime(increment);
         await aFewRunLoops();
       }
-      if (previousOffset < finalOffset) {
-        offset = finalOffset;
-        jest.advanceTimersByTime(finalOffset - previousOffset);
+      if (Date.now() < targetTimestamp) {
+        jest.advanceTimersByTime(targetTimestamp - Date.now());
         await aFewRunLoops();
       }
     }
-  }
-
-  beforeEach(() => {
-    offset = 0;
-    global.Date = FakeDate;
-  });
-  afterEach(() => {
-    global.Date = OriginalDate;
-  });
-
-  /**
-   * Returns the real-world current timestamp (unaffected by fake timers).
-   */
-  function realNow() {
-    return OriginalDate.now();
   }
 
   // In future we may add other methods such as `setTimeWithoutAdvancingTimers`
