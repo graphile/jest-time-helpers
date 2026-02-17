@@ -1,7 +1,7 @@
 import { jest, afterEach, beforeEach } from "@jest/globals";
 import * as assert from "assert";
 import * as util from "util";
-import { Clock } from "@sinonjs/fake-timers";
+import type { Clock } from "@sinonjs/fake-timers";
 
 // Grab the setTimeout from global before jest overwrites it with useFakeTimers
 const setTimeoutBypassingFakes = global.setTimeout;
