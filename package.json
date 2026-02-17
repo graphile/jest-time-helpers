@@ -1,6 +1,6 @@
 {
   "name": "jest-time-helpers",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Helpers you can use in tests that relate to the passage of time (i.e. code that involves setTimeout, setInterval, new Date(), Date.now(), etc)",
   "main": "dist/index.js",
   "scripts": {
