@@ -1,6 +1,5 @@
 import * as assert from "assert";
 import * as util from "util";
-import type { Clock } from "@sinonjs/fake-timers";
 
 // Grab the setTimeout from global before jest overwrites it with useFakeTimers
 const setTimeoutBypassingFakes = global.setTimeout;
@@ -127,18 +126,15 @@ export function setupFakeTimers() {
       )}'`,
     );
 
-    const clock = (Date as any).clock;
-    assertSinonJsClock(clock);
-
-    if (targetTimestamp < clock.now) {
-      clock.setSystemTime(targetTimestamp);
+    if (targetTimestamp < Date.now()) {
+      jest.setSystemTime(targetTimestamp);
     } else {
-      while (clock.now + increment < targetTimestamp) {
+      while (Date.now() + increment < targetTimestamp) {
         jest.advanceTimersByTime(increment);
         await aFewRunLoops();
       }
-      if (clock.now < targetTimestamp) {
-        jest.advanceTimersByTime(targetTimestamp - clock.now);
+      if (Date.now() < targetTimestamp) {
+        jest.advanceTimersByTime(targetTimestamp - Date.now());
         await aFewRunLoops();
       }
     }
@@ -147,16 +143,6 @@ export function setupFakeTimers() {
   // In future we may add other methods such as `setTimeWithoutAdvancingTimers`
   // to emulate the system clock changing without real time elapsing.
   return { setTime, realNow };
-}
-
-function assertSinonJsClock(clock: any): asserts clock is Clock {
-  if (
-    !clock ||
-    typeof clock.now !== "number" ||
-    typeof clock.setSystemTime !== "function"
-  ) {
-    throw new Error(`Expected sinonjs clock!`);
-  }
 }
 
 /** One second in milliseconds */
