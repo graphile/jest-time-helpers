@@ -39,7 +39,7 @@
   },
   "homepage": "https://github.com/graphile/jest-time-helpers#readme",
   "peerDependencies": {
-    "jest": ">=22 <30"
+    "jest": ">=22 <31"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.9",
