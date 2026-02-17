@@ -12,8 +12,8 @@ test("Date.now() starts at the right time", () => {
   expect(difference).toBeLessThanOrEqual(10);
 });
 
-test("Date.now() and +new Date() return the expected time when setTime is used", async () => {
-  await setTime(REFERENCE_TIMESTAMP);
+test("Date.now() and +new Date() return the expected time when setTime is used", () => {
+  setTime(REFERENCE_TIMESTAMP);
   const nowAccordingToDateNow = Date.now();
   const nowAccordingToNewDate = +new Date();
   const nowAccordingToRealNow = realNow();
@@ -34,18 +34,18 @@ test("Date.now() and +new Date() return the expected time when setTime is used",
   expect(differenceNewDate).toBeLessThanOrEqual(10);
 });
 
-test("new Date().toISOString() returns the expected timestamp when setTime is used", async () => {
-  await setTime(REFERENCE_TIMESTAMP);
+test("new Date().toISOString() returns the expected timestamp when setTime is used", () => {
+  setTime(REFERENCE_TIMESTAMP);
   expect(new Date().toISOString()).toMatch(/^2000-02-14T14:00:0.*Z$/);
 });
 
-test("new Date(3000) returns the expected timestamp", async () => {
-  await setTime(REFERENCE_TIMESTAMP);
+test("new Date(3000) returns the expected timestamp", () => {
+  setTime(REFERENCE_TIMESTAMP);
   expect(new Date(3000).toISOString()).toMatch(/^1970-01-01T00:00:03.000Z$/);
 });
 
-test("Advancing timers works as expected", async () => {
-  await setTime(REFERENCE_TIMESTAMP);
+test("Advancing timers works as expected", () => {
+  setTime(REFERENCE_TIMESTAMP);
   let called = false;
   setTimeout(() => {
     called = true;
@@ -55,16 +55,16 @@ test("Advancing timers works as expected", async () => {
   expect(called).toBe(false);
 
   // Advancing 500ms shouldn't be enough to call the timer
-  await setTime(REFERENCE_TIMESTAMP + 500);
+  setTime(REFERENCE_TIMESTAMP + 500);
   expect(called).toBe(false);
 
   // Advancing another 600ms should be enough for the 1000ms timer to be called
-  await setTime(REFERENCE_TIMESTAMP + 500 + 999);
+  setTime(REFERENCE_TIMESTAMP + 500 + 600);
   expect(called).toBe(true);
 });
 
-test("Clock skew (going back in time) doesn't break timers", async () => {
-  await setTime(REFERENCE_TIMESTAMP);
+test("Clock skew (going back in time) doesn't break timers", () => {
+  setTime(REFERENCE_TIMESTAMP);
   let called = false;
   setTimeout(() => {
     called = true;
@@ -74,21 +74,21 @@ test("Clock skew (going back in time) doesn't break timers", async () => {
   expect(called).toBe(false);
 
   // Advancing 500ms shouldn't be enough to call the timer
-  await setTime(REFERENCE_TIMESTAMP + 500);
+  setTime(REFERENCE_TIMESTAMP + 500);
   expect(called).toBe(false);
 
   // R-r-r-r-rewind! 300ms
   // NOTE: rewinding the clock does **NOT** undo timer advancement, just like
   // setting the computer clock back a couple minutes does not undo all the
   // work that happened in the last 2 minutes.
-  await setTime(REFERENCE_TIMESTAMP + 500 - 300);
+  setTime(REFERENCE_TIMESTAMP + 500 - 300);
   expect(called).toBe(false);
 
   // Advancing 450ms from previous timestamp shouldn't be enough to call the timer (total advancement: 950ms)
-  await setTime(REFERENCE_TIMESTAMP + 500 - 300 + 450);
+  setTime(REFERENCE_TIMESTAMP + 500 - 300 + 450);
   expect(called).toBe(false);
 
   // Advancing another 100ms (total advancement: 1050ms) should be enough to call the timer
-  await setTime(REFERENCE_TIMESTAMP + 500 - 300 + 450 + 100);
+  setTime(REFERENCE_TIMESTAMP + 500 - 300 + 450 + 100);
   expect(called).toBe(true);
 });
