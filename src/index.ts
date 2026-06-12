@@ -105,9 +105,17 @@ export function setupFakeTimers() {
     interval = setInterval(() => {
       jest.advanceTimersByTime(0);
     }, 10);
-    jest.useFakeTimers();
+    jest.useFakeTimers({
+      doNotFake: [
+        "nextTick",
+        "setImmediate",
+        "clearImmediate",
+        "queueMicrotask",
+      ],
+    });
   });
   afterEach(() => {
+    void jest.runAllTimers();
     void jest.useRealTimers();
     if (interval != null) {
       clearInterval(interval);
